@@ -22,11 +22,12 @@ from monai.inferers import sliding_window_inference
 from monai.networks.nets import SwinUNETR
 from monai.networks.nets import SwinUNETR, UNETR, SegResNetDS, SegResNet, SEResNext101, SEResNet101
 import json
+from networks.net_unest.unest import UNesT
 
 parser = argparse.ArgumentParser(description="Swin UNETR segmentation pipeline")
 
 parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
-parser.add_argument("--exp_name", default="swinunetr_s2", type=str, help="experiment name")
+parser.add_argument("--exp_name", default="unest_s2", type=str, help="experiment name")
 parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 
 parser.add_argument(
@@ -97,17 +98,20 @@ def main():
     model_name = args.pretrained_model_name
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     pretrained_pth = os.path.join(pretrained_dir, model_name)
-    model = SwinUNETR(
+    model = UNETR(
+        in_channels=1,
+        out_channels=10,
         img_size=(args.roi_x, args.roi_y, args.roi_z),
-        in_channels=args.in_channels,
-        out_channels=args.out_channels,
-        feature_size=args.feature_size,
-        drop_rate=0.0,
-        attn_drop_rate=0.0,
-        dropout_path_rate=args.dropout_path_rate,
-        use_checkpoint=args.use_checkpoint,
-        use_v2=True
-    )
+        feature_size=32,
+        hidden_size=768,
+        mlp_dim=3072,
+        num_heads=16,
+        pos_embed='conv',
+        norm_name='instance',
+        conv_block=True,
+        res_block=True,
+        dropout_rate=0.0)
+    
     model_dict = torch.load(pretrained_pth)["state_dict"]
     model.load_state_dict(model_dict)
     model.eval()

@@ -20,15 +20,13 @@ Please download the trained weights for Swin UNETR backbone (subject to update t
 
 # Data Preparation
 
-For training and testing, it's needed to prepare a JSON file. 
+For training, it's needed to prepare a JSON file. 
 
 We provide the json file that is used to train our models for AbdomenAtlas in the following <a href="https://drive.google.com/file/d/1t4fIQQkONv7ArTSZe4Nucwkk1KfdUDvW/view?usp=sharing"> link</a>.
 
 Once the json file is downloaded, please place it in the same folder as the dataset. 
 Set the correct dataset root dir under ```dataset```
 Note that you need to provide the location of your dataset directory by using ```--data_dir```.
-
-For inference, the test data also need to be set in a dataset path root, and generate the JSON file under ```validation``` key. Same as the provided JSON file with ```validation``` key.
 
 # Training
 
@@ -63,7 +61,7 @@ python main.py --json_list=./monai_benchmark/jsons/dataset_benchmark_JHU.json --
 ## Inference
 
 ``` bash
-python test.py --json_list=./monai_benchmark/jsons/dataset_benchmark_JHU.json --data_dir=./monai_benchmark --pretrained_model_name model_swinunetrv2_s3_abdomenatlas.pt
+python test.py --data_dir=./monai_benchmark/dataset_root_path --pretrained_model_name model_swinunetrv2_s3_abdomenatlas.pt
 ```
 
 # Segmentation Output

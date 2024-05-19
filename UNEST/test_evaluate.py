@@ -20,18 +20,14 @@ from utils.utils import dice, resample_3d
 
 from monai.inferers import sliding_window_inference
 from monai.networks.nets import SwinUNETR
-from monai.networks.nets import SwinUNETR, UNETR, SegResNetDS, SegResNet, SEResNext101, SEResNet101
-import json
 
 parser = argparse.ArgumentParser(description="Swin UNETR segmentation pipeline")
-
-parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
-parser.add_argument("--exp_name", default="swinunetr_s2", type=str, help="experiment name")
-parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
-
 parser.add_argument(
     "--pretrained_dir", default="./pretrained_models/", type=str, help="pretrained checkpoint directory"
 )
+parser.add_argument("--data_dir", default="/dataset/dataset0/", type=str, help="dataset directory")
+parser.add_argument("--exp_name", default="test1", type=str, help="experiment name")
+parser.add_argument("--json_list", default="dataset_0.json", type=str, help="dataset json file")
 parser.add_argument(
     "--pretrained_model_name",
     default="swin_unetr.base_5000ep_f48_lr2e-4_pretrained.pt",
@@ -41,7 +37,7 @@ parser.add_argument(
 parser.add_argument("--feature_size", default=48, type=int, help="feature size")
 parser.add_argument("--infer_overlap", default=0.5, type=float, help="sliding window inference overlap")
 parser.add_argument("--in_channels", default=1, type=int, help="number of input channels")
-parser.add_argument("--out_channels", default=10, type=int, help="number of output channels")
+parser.add_argument("--out_channels", default=14, type=int, help="number of output channels")
 parser.add_argument("--a_min", default=-175.0, type=float, help="a_min in ScaleIntensityRanged")
 parser.add_argument("--a_max", default=250.0, type=float, help="a_max in ScaleIntensityRanged")
 parser.add_argument("--b_min", default=0.0, type=float, help="b_min in ScaleIntensityRanged")
@@ -61,99 +57,62 @@ parser.add_argument("--RandScaleIntensityd_prob", default=0.1, type=float, help=
 parser.add_argument("--RandShiftIntensityd_prob", default=0.1, type=float, help="RandShiftIntensityd aug probability")
 parser.add_argument("--spatial_dims", default=3, type=int, help="spatial dimension of input data")
 parser.add_argument("--use_checkpoint", action="store_true", help="use gradient checkpointing to save memory")
-parser.add_argument("--dropout_path_rate", default=0.0, type=float, help="drop path rate")
-# parser.add_argument("--dropout_rate", default=0.0, type=float, help="dropout rate")
 
-def create_datalist_json(data_dir, output_json):
-    datalist = {"validation": []}
-    for case_dir in sorted(os.listdir(data_dir)):
-        case_path = os.path.join(data_dir, case_dir)
-        if os.path.isdir(case_path):
-            image_path = os.path.join(case_path, "ct.nii.gz")
-            if os.path.exists(image_path):
-                datalist["validation"].append({"image": image_path})
-#             label_path = os.path.join(case_path, "segmentations", "combined_all_labels.nii.gz")
-#             if os.path.exists(image_path) and os.path.exists(label_path):
-#                 datalist["validation"].append({"image": image_path, "label": label_path})
-    
-    with open(output_json, "w") as json_file:
-        json.dump(datalist, json_file, indent=4)
-    return output_json
 
 def main():
     args = parser.parse_args()
     args.test_mode = True
-    output_directory = "./outputs/" + args.exp_name + "/AbdomenAtlasPredict"
+    output_directory = "./outputs/" + args.exp_name
     if not os.path.exists(output_directory):
         os.makedirs(output_directory)
-        
-        
-    datalist_json = os.path.join(output_directory, "datalist.json")
-    create_datalist_json(args.data_dir, datalist_json)
-    args.json_list = datalist_json
-
     val_loader = get_loader(args)
     pretrained_dir = args.pretrained_dir
     model_name = args.pretrained_model_name
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     pretrained_pth = os.path.join(pretrained_dir, model_name)
     model = SwinUNETR(
-        img_size=(args.roi_x, args.roi_y, args.roi_z),
+        img_size=96,
         in_channels=args.in_channels,
         out_channels=args.out_channels,
         feature_size=args.feature_size,
         drop_rate=0.0,
         attn_drop_rate=0.0,
-        dropout_path_rate=args.dropout_path_rate,
+        dropout_path_rate=0.0,
         use_checkpoint=args.use_checkpoint,
-        use_v2=True
     )
     model_dict = torch.load(pretrained_pth)["state_dict"]
     model.load_state_dict(model_dict)
     model.eval()
     model.to(device)
 
-    organs = {
-        1: "aorta",
-        2: "gall_bladder",
-        3: "kidney_left",
-        4: "kidney_right",
-        5: "liver",
-        6: "pancreas",
-        7: "postcave",
-        8: "spleen",
-        9: "stomach"
-    }
-
-
     with torch.no_grad():
         dice_list_case = []
         for i, batch in enumerate(val_loader):
-            val_inputs = batch["image"].cuda()
-            original_affine = batch["image_meta_dict"]["affine"][0].numpy()
-            _, h, w, d, _, _, _, _ = batch["image_meta_dict"]["dim"][0]
+            val_inputs, val_labels = (batch["image"].cuda(), batch["label"].cuda())
+            original_affine = batch["label_meta_dict"]["affine"][0].numpy()
+            _, _, h, w, d = val_labels.shape
             target_shape = (h, w, d)
-            img_name = batch["image_meta_dict"]["filename_or_obj"][0].split("/")[-2]
-            print("Inference on case {}, shape: {}".format(img_name, target_shape))
-
+            img_name = batch["image_meta_dict"]["filename_or_obj"][0].split("/")[-1]
+            print("Inference on case {}".format(img_name))
             val_outputs = sliding_window_inference(
                 val_inputs, (args.roi_x, args.roi_y, args.roi_z), 4, model, overlap=args.infer_overlap, mode="gaussian"
             )
             val_outputs = torch.softmax(val_outputs, 1).cpu().numpy()
             val_outputs = np.argmax(val_outputs, axis=1).astype(np.uint8)[0]
+            val_labels = val_labels.cpu().numpy()[0, 0, :, :, :]
             val_outputs = resample_3d(val_outputs, target_shape)
             dice_list_sub = []
+            for i in range(1, 14):
+                organ_Dice = dice(val_outputs == i, val_labels == i)
+                dice_list_sub.append(organ_Dice)
+            mean_dice = np.mean(dice_list_sub)
+            print("Mean Organ Dice: {}".format(mean_dice))
+            dice_list_case.append(mean_dice)
+            nib.save(
+                nib.Nifti1Image(val_outputs.astype(np.uint8), original_affine), os.path.join(output_directory, img_name)
+            )
 
-            # Create the directory structure
-            case_dir = os.path.join(output_directory, img_name, "predictions")
-            os.makedirs(case_dir, exist_ok=True)
-
-            # Save each organ as a separate binary file
-            for organ_id, organ_name in organs.items():
-                organ_mask = (val_outputs == organ_id).astype(np.uint8)
-                organ_filename = os.path.join(case_dir, f"{organ_name}.nii.gz")
-                nib.save(nib.Nifti1Image(organ_mask, original_affine), organ_filename)
-                print(f"Saved {organ_name} mask to {organ_filename}")
+        print("Overall Mean Dice: {}".format(np.mean(dice_list_case)))
 
 
 if __name__ == "__main__":

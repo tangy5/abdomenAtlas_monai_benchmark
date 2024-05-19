@@ -68,7 +68,7 @@ class Sampler(torch.utils.data.Sampler):
 
 def get_loader(args):
     data_dir = args.data_dir
-    datalist_json = os.path.join(args.json_list)
+    datalist_json = os.path.join(data_dir, args.json_list)
     train_transform = transforms.Compose(
         [
             transforms.LoadImaged(keys=["image", "label"]),
