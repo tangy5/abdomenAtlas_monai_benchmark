@@ -56,7 +56,7 @@ python main.py --json_list=./monai_benchmark/jsons/dataset_benchmark_JHU.json --
 ## Inference
 
 ``` bash
-python test.py --data_dir=./monai_benchmark --pretrained_model_name model_unetr_s3.pt
+python test_unetr.py --data_dir=./monai_benchmark --pretrained_model_name model_unetr_s2.pt
 ```
 
 

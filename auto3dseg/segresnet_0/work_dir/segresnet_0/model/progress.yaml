@@ -1,0 +1,15 @@
+- {best_avg_dice_score_epoch: 10, best_avg_dice_score: 0.7552, save_time: 0.8312,
+  time: 14.33 hr, train_time: 8457.21s, validation_time: 259.06s, epoch_time: 8716.34s,
+  model: ./work_dir/segresnet_0/model/model.pt, date: '2024-05-25 10:27:46'}
+- {best_avg_dice_score_epoch: 22, best_avg_dice_score: 0.7849, save_time: 0.7888,
+  time: 28.71 hr, train_time: 8577.85s, validation_time: 257.06s, epoch_time: 8834.98s,
+  model: ./work_dir/segresnet_0/model/model.pt, date: '2024-05-26 00:50:18'}
+- {best_avg_dice_score_epoch: 32, best_avg_dice_score: 0.7881, save_time: 0.8325,
+  time: 40.75 hr, train_time: 8522.31s, validation_time: 257.19s, epoch_time: 8779.58s,
+  model: ./work_dir/segresnet_0/model/model.pt, date: '2024-05-26 12:53:08'}
+- {best_avg_dice_score_epoch: 42, best_avg_dice_score: 0.7953, save_time: 0.7977,
+  time: 52.95 hr, train_time: 8397.84s, validation_time: 256.91s, epoch_time: 8654.82s,
+  model: ./work_dir/segresnet_0/model/model.pt, date: '2024-05-27 01:05:11'}
+- {best_avg_dice_score_epoch: 52, best_avg_dice_score: 0.8058, save_time: 0.7805,
+  time: 65.26 hr, train_time: 9024.21s, validation_time: 257.76s, epoch_time: 9282.05s,
+  model: ./work_dir/segresnet_0/model/model.pt, date: '2024-05-27 13:23:18'}

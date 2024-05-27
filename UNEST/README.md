@@ -8,7 +8,7 @@ pip install -r requirements.txt
 
 # Models
 
-Please download the trained weights for UNEST backbone (subject to update the lastest) from this <a href=""> link (TBA)</a>.
+Please download the trained weights for UNEST backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/e1468cx8tniulza0xben9/model_unest_lowerLR_s2.pt?rlkey=mi7yzplrl4ufegakozakunxcs&st=m6tuqccu&dl=0"> link </a>.
 
 
 # Data Preparation
@@ -47,7 +47,7 @@ python main.py --json_list=./monai_benchmark/jsons/dataset_benchmark_JHU.json --
 ## Inference
 
 ``` bash
-python test.py --data_dir=./monai_benchmark --pretrained_model_name model_unest_s3.pt
+python test_unest.py --data_dir=./monai_benchmark --pretrained_model_name model_unest_lowerLR_s2.pt
 ```
 
 

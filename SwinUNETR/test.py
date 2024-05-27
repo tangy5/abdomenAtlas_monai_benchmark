@@ -120,7 +120,7 @@ def main():
         4: "kidney_right",
         5: "liver",
         6: "pancreas",
-        7: "postcave",
+        7: "postcava",
         8: "spleen",
         9: "stomach"
     }

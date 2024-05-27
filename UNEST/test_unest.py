@@ -35,7 +35,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--pretrained_model_name",
-    default="swin_unetr.base_5000ep_f48_lr2e-4_pretrained.pt",
+    default="model_unest_lowerLR_s2.pt",
     type=str,
     help="pretrained model name",
 )
@@ -98,17 +98,7 @@ def main():
     model_name = args.pretrained_model_name
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     pretrained_pth = os.path.join(pretrained_dir, model_name)
-#     model = SwinUNETR(
-#         img_size=(args.roi_x, args.roi_y, args.roi_z),
-#         in_channels=args.in_channels,
-#         out_channels=args.out_channels,
-#         feature_size=args.feature_size,
-#         drop_rate=0.0,
-#         attn_drop_rate=0.0,
-#         dropout_path_rate=args.dropout_path_rate,
-#         use_checkpoint=args.use_checkpoint,
-#         use_v2=True
-#     )
+
     model = UNesT(
         in_channels=args.in_channels,
         out_channels=args.out_channels,
@@ -126,7 +116,7 @@ def main():
         4: "kidney_right",
         5: "liver",
         6: "pancreas",
-        7: "postcave",
+        7: "postcava",
         8: "spleen",
         9: "stomach"
     }

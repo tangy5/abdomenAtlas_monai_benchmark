@@ -1,0 +1,13 @@
+{
+    "testing": [
+        {
+            "image": "/RW/2024/monai_benchmark/test_data_sample/test_01/ct.nii.gz"
+        },
+        {
+            "image": "/RW/2024/monai_benchmark/test_data_sample/test_02/ct.nii.gz"
+        },
+        {
+            "image": "/RW/2024/monai_benchmark/test_data_sample/test_03/ct.nii.gz"
+        }
+    ]
+}

@@ -35,7 +35,7 @@ parser.add_argument(
 )
 parser.add_argument(
     "--pretrained_model_name",
-    default="swin_unetr.base_5000ep_f48_lr2e-4_pretrained.pt",
+    default="model_unetr_s2.pt",
     type=str,
     help="pretrained model name",
 )
@@ -124,7 +124,7 @@ def main():
         4: "kidney_right",
         5: "liver",
         6: "pancreas",
-        7: "postcave",
+        7: "postcava",
         8: "spleen",
         9: "stomach"
     }
