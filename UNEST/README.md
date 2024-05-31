@@ -8,7 +8,7 @@ pip install -r requirements.txt
 
 # Models
 
-Please download the trained weights for UNEST backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/e1468cx8tniulza0xben9/model_unest_lowerLR_s2.pt?rlkey=mi7yzplrl4ufegakozakunxcs&st=m6tuqccu&dl=0"> link </a>.
+Please download the trained weights for UNEST backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/8orhego8a3iwb2xptpmaf/model_unest_0530_s6.pt?rlkey=ldvq3h2o16dq91vfa66p8hhqp&st=f87fix62&dl=0"> link </a>.
 
 
 # Data Preparation

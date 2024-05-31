@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 # Models
 
-Please download the trained weights for Swin UNETR backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/pdi87coa8ici5mqb51dli/model_swinunetrv2_s3_abdomenatlas.pt?rlkey=4bh0i1149p6hc08d8b4lbe0se&st=ccmot9ac&dl=0"> link</a>.
+Please download the trained weights for Swin UNETR backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/mburyy8fd29wt1675bvbu/model_swinunetr_0530_s4.pt?rlkey=qv0pqhvyto52aumh635pugzf8&st=j3vevrwt&dl=0"> link</a>.
 
 
 # Data Preparation

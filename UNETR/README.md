@@ -8,7 +8,7 @@ pip install -r requirements.txt
 
 # Models
 
-Please download the trained weights for UNETR backbone (subject to update the lastest) from this <a href=""> link (TBA)</a>.
+Please download the trained weights for UNETR backbone (subject to update the lastest) from this <a href="https://www.dropbox.com/scl/fi/bmmd7xrfb8grdmgkrtk2v/model_unetr_0530_s2.pt?rlkey=3q69tmoyz6qph8aznbm66umou&st=7urhe3az&dl=0"> link (TBA)</a>.
 
 
 # Data Preparation
